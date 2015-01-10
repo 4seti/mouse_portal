@@ -6,11 +6,19 @@
 on_off_toggle=true
 
 check_if_script_already_running () {
-    if pidof -x "mouse_portal.sh" >/dev/null; then
-        echo "Exiting, script is already running."
-        exit 0
-    fi
+    for pid in $(pidof -x mouse_portal.sh); do
+        if [ $pid != $$ ]; then
+            echo "Exiting, script is already running ($pid)"
+            exit 1
+        fi
+    done
 }
+
+check_package_dependencies () {
+    command -v xrandr >/dev/null 2>&1 || { echo "What">&2; exit 1; }
+    command -v xdotool >/dev/null 2>&1 || { echo "What">&2; exit 1; }
+}    
+
 
 get_screen_resolution_and_set_vars () {
     Xaxis=$((xrandr --current 2> /dev/null) | grep '* ' | uniq | awk '{print $1}' | cut -d 'x' -f1)
@@ -41,6 +49,7 @@ move_mouse_if_necessary () {
 }
 
 check_if_script_already_running
+check_package_dependencies
 get_screen_resolution_and_set_vars
 
 while $on_off_toggle;
