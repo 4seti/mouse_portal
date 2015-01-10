@@ -15,8 +15,8 @@ check_if_script_already_running () {
 }
 
 check_package_dependencies () {
-    command -v xrandr >/dev/null 2>&1 || { echo "What">&2; exit 1; }
-    command -v xdotool >/dev/null 2>&1 || { echo "What">&2; exit 1; }
+    command -v xrandr >/dev/null 2>&1 || { echo "Please install xrandr to run this script.">&2; exit 1; }
+    command -v xdotool >/dev/null 2>&1 || { echo "Please install xdotool to run this script.">&2; exit 1; }
 }    
 
 
